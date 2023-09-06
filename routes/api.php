@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\TopicController;
-use App\Http\Controllers\Api\WordsetController;
 use App\Http\Controllers\Api\WordController;
+use App\Http\Controllers\Api\WordsetController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -17,20 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
-    Route::post('register', 'AuthController@register');
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
+    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:api')->apiResources([
-    '/topics' => TopicController::class,
-    '/wordsets' => WordsetController::class,
-    '/words' => WordController::class
-]);
+Route::group([
+    'middleware' => ['api', 'auth:api'],
+], function ($router) {
+    Route::apiResource('/topics', TopicController::class);
+    Route::apiResource('/wordsets', WordsetController::class);
+    Route::apiResource('/words', WordController::class);
+});

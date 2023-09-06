@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'register']]);
     }
 
     /**
@@ -71,11 +71,13 @@ class AuthController extends Controller
 
     public function register(UserRequest $request)
     {
-        $user = User::create($request->validate([
-            "name"=> $request->name,
-            "email"=>$request->email,
-            "password"=> Hash::make($request->password),
-        ]));
+        if ($request->validated()){
+            $user = User::create([
+                "name"=> $request->name,
+                "email"=>$request->email,
+                "password"=> Hash::make($request->password),
+            ]);
+        }
 
         return new UserResource($user);
     }
