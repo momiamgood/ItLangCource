@@ -10,9 +10,9 @@ class Topic extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name','user_id'];
+    protected $guarded = [];
 
-    public function wordsets()
+    public function wordsets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Wordset::class);
     }

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('name');
+        Schema::create('user_topic_pivot', function (Blueprint $table) {
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('topic_id')->references('id')->on('topics');
         });
     }
 
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('user_topic_pivot');
     }
 };

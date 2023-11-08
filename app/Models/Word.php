@@ -10,5 +10,5 @@ class Word extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['english', 'russian', 'wordset_id'];
+    protected $guarded = [];
 }

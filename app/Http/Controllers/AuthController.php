@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\WordResource;
 use App\Models\User;
-use App\Models\Word;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -71,11 +69,12 @@ class AuthController extends Controller
 
     public function register(UserRequest $request)
     {
-        if ($request->validated()){
+        if ($request->validated()) {
             $user = User::create([
-                "name"=> $request->name,
-                "email"=>$request->email,
-                "password"=> Hash::make($request->password),
+                "role_id" => 1,
+                "name" => $request->name,
+                "email" => $request->email,
+                "password" => Hash::make($request->password),
             ]);
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\WordRequest;
 use App\Http\Resources\WordResource;
 use App\Models\Word;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class WordController extends Controller
@@ -19,10 +20,7 @@ class WordController extends Controller
     }
 
     public function store (WordRequest $request) {
-
-        $new_word = Word::create($request->validated());
-
-        return new WordResource($new_word);
+        return new WordResource(Word::create($request->validated()));
     }
 
     public function update(WordRequest $request, Word $word) {
@@ -32,7 +30,12 @@ class WordController extends Controller
 
     public function destroy(Word $word) {
         $word->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
 
-        return response(null, \Illuminate\Http\Response::HTTP_NO_CONTENT);
+    public function markAsLearned(){
+
+
+
     }
 }

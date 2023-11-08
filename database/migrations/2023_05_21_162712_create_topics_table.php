@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('topics', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->string('name');
+
+            $table->foreignId('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
-
-        Schema::table('topics', function (Blueprint $table) {
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-
-
     }
 
     /**

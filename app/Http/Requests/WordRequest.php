@@ -23,8 +23,8 @@ class WordRequest extends FormRequest
     {
         return [
             'english' => 'required|max:255',
-            'russian'=>'required|max:255',
-            'wordset_id'=>'required|max:255'
+            'russian' => 'required|max:255',
+            'wordset_id' => 'required|max:255'
         ];
     }
 }

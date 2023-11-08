@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wordsets', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-
-            $table->foreignId('topic_id')
-                ->references('id')
-                ->on('topics')
-                ->cascadeOnDelete();
+        Schema::create('user_word_pivot', function (Blueprint $table) {
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('word_id')->references('id')->on('words');
         });
     }
 
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wordsets');
+        Schema::dropIfExists('user_word_pivot');
     }
 };

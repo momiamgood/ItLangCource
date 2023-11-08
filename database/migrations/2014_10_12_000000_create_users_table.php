@@ -21,6 +21,10 @@ return new class extends Migration
                 ->default(null);
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreignId('role_id')
+                ->references('id')
+                ->on('roles');
         });
     }
 

@@ -29,9 +29,10 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['api', 'auth:api'],
+    'middleware' => ['api', 'auth'],
 ], function ($router) {
     Route::apiResource('/topics', TopicController::class);
     Route::apiResource('/wordsets', WordsetController::class);
     Route::apiResource('/words', WordController::class);
 });
+

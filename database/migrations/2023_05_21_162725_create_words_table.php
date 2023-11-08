@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('words', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->string('english');
             $table->string('russian');
-        });
 
-        Schema::table('words',function (Blueprint $table) {
-            $table->foreignId('wordset_id')->references('id')->on('wordsets')->onDelete('cascade');
+            $table->foreignId('wordset_id')
+                ->references('id')
+                ->on('wordsets')
+                ->cascadeOnDelete();
         });
     }
 

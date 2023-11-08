@@ -10,8 +10,8 @@ class Wordset extends Model
     public $timestamps = false;
     use HasFactory;
 
-    protected $fillable = ['name', 'topic_id'];
-    public function words()
+    protected $guarded = [];
+    public function words(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Word::class);
     }
