@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Http\Resources\TopicResource;
+use App\Http\Resources\UserTopicResource;
+use App\Http\Resources\UserWordResource;
 use App\Models\Topic;
 use App\Models\UserTopicPivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class TopicController extends Controller
@@ -26,13 +27,7 @@ class TopicController extends Controller
 
     public function store(TopicRequest $request)
     {
-        $data = $request->validated();
-        $new_topic = Topic::create([
-            'name' => $data['name'],
-            'user_id' => Auth::id()
-        ]);
-
-        return new TopicResource($new_topic);
+        return new TopicResource(Topic::create($request->validated()));
     }
 
     public function update(TopicRequest $request, Topic $topic)
@@ -44,27 +39,28 @@ class TopicController extends Controller
     public function destroy(Topic $topic)
     {
         $topic->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function selectTopic(Topic $topic): UserTopicResource
+    {
+        return new UserTopicResource(UserTopicPivot::create([
+            'topic_id' => $topic->id,
+            'user_id' => Auth::id()
+        ]));
+    }
+
+    public function deleteTopic(Topic $topic)
+    {
+        UserTopicPivot::where('topic_id', $topic->id)
+            ->where('user_id', Auth::id())
+            ->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function selectTopic(Topic $topic)
+    public function selectedList(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        UserTopicPivot::create([
-            'user_id' => Auth::id(),
-            'topic_id' => $topic->id
-        ]);
-
-        return response()->json(['data' => "Topic $topic->name selected"], 200);
-    }
-
-    public function deleteSelectedTopic(Topic $topic)
-    {
-        UserTopicPivot::create([
-            'user_id' => Auth::id(),
-            'topic_id' => $topic->id
-        ]);
-
-        return response()->json(['data' => "Topic $topic->name selected"], 200);
+        return UserTopicResource::collection(Auth::user()->topics);
     }
 }

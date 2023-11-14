@@ -34,5 +34,14 @@ Route::group([
     Route::apiResource('/topics', TopicController::class);
     Route::apiResource('/wordsets', WordsetController::class);
     Route::apiResource('/words', WordController::class);
+
+
+    Route::get('/topics/{topic}/add', [TopicController::class, 'selectTopic']);
+    Route::get('/topics/{topic}/delete', [TopicController::class, 'deleteTopic']);
+    Route::get('/selected', [TopicController::class, 'selectedList']);
+
+    Route::get('/words/{word}/add', [WordController::class, 'markAsLearned']);
+    Route::get('/words/{word}/delete', [WordController::class, 'deleteFromLearned']);
+    Route::get('/words/learned', [WordController::class, 'learned']);
 });
 

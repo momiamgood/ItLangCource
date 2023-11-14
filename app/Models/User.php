@@ -69,4 +69,22 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo('App\Role', 'role_id', "id");
     }
+
+    public function topics()
+    {
+        return $this->belongsToMany(
+            Topic::class,
+            'user_topic_pivot',
+            'user_id',
+            'topic_id')
+            ->using(UserTopicPivot::class);
+    }
+
+    public function words(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(
+            Word::class,
+            'user_word_pivot')
+            ->using(UserWordPivot::class);
+    }
 }
