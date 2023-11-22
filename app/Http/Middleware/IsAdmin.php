@@ -16,7 +16,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->getRole->name === 'admin') {
+        if (Auth::user()->getUserRole->name === 'admin') {
             return $next($request);
         }
         abort(403, 'Unauthorized');

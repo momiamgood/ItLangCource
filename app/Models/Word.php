@@ -11,4 +11,9 @@ class Word extends Model
 
     public $timestamps = false;
     protected $guarded = [];
+
+    public function wordset()
+    {
+        return $this->belongsTo(Wordset::class, 'wordset_id', 'id');
+    }
 }

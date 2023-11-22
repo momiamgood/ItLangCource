@@ -31,17 +31,33 @@ Route::group([
 Route::group([
     'middleware' => ['api', 'auth'],
 ], function ($router) {
-    Route::apiResource('/topics', TopicController::class);
-    Route::apiResource('/wordsets', WordsetController::class);
-    Route::apiResource('/words', WordController::class);
 
+    Route::group([
+        'middleware' => ['api', 'auth', 'admin']
+    ], function () {
+        Route::apiResource('/topics', TopicController::class);
+        Route::apiResource('/wordsets', WordsetController::class);
+        Route::apiResource('/words', WordController::class);
+    });
 
-    Route::get('/topics/{topic}/add', [TopicController::class, 'selectTopic']);
-    Route::get('/topics/{topic}/delete', [TopicController::class, 'deleteTopic']);
-    Route::get('/selected', [TopicController::class, 'selectedList']);
+    Route::group([
+        'middleware' => ['api', 'auth', 'user']
+    ], function () {
+        Route::get('/topics/{id}', [TopicController::class, 'show']);
+        Route::get('/topics/', [TopicController::class, 'index']);
+        Route::get('/wordsets/{id}', [WordsetController::class, 'show']);
+        Route::get('/wordsets/', [WordsetController::class, 'index']);
+        Route::get('/words/{id}', [WordController::class, 'show']);
 
-    Route::get('/words/{word}/add', [WordController::class, 'markAsLearned']);
-    Route::get('/words/{word}/delete', [WordController::class, 'deleteFromLearned']);
-    Route::get('/words/learned', [WordController::class, 'learned']);
+        Route::get('/topics/{topic}/add', [TopicController::class, 'selectTopic']);
+        Route::delete('/topics/{topic}/delete', [TopicController::class, 'deleteTopic']);
+        Route::get('/selected', [TopicController::class, 'selectedList']);
+
+        Route::get('/words/{word}/add', [WordController::class, 'markAsLearned']);
+        Route::delete('/words/{word}/delete', [WordController::class, 'deleteFromLearned']);
+        Route::get('/words/learned', [WordController::class, 'learned']);
+
+        Route::get('learning', [TopicController::class, 'getLearningList']);
+    });
 });
 

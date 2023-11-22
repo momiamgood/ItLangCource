@@ -16,4 +16,9 @@ class Topic extends Model
     {
         return $this->hasMany(Wordset::class);
     }
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_topic_pivot', 'topic_id', 'user_id');
+    }
 }

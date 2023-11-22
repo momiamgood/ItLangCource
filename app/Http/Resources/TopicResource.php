@@ -16,7 +16,9 @@ class TopicResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'wordsets' => WordsetResource::collection($this->wordsets)
+            'wordsets' => [
+                WordsetResource::collection($this->wordsets)
+            ]
         ];
     }
 }
